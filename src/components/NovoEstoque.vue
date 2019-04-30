@@ -110,18 +110,16 @@
               </div>
             </div>
           </div>
-          <div class="table-responsive custom-scroll " style=" overflow-y: auto;">
+          <div  class="table-responsive" style="display: flex; max-width: 100% ; min-height: 700px;">
             <table class="table table-condensed table-bordered">
               <thead>
                 <tr class="pb-0 mb-0">
 
                   <th v-if="show.vehicle">
-                    <v-select
-                      multiple
+                    <input
+                      style="padding-left: 5px; border: 1px solid #3333; border-radius: 5px; height: 28px;"
                       v-model="vehicleFilter"
-                      :options="vehicleForSearch"
-                      :reduce="veiculo => veiculo"
-                      label="veiculo" />
+                    />
                   </th>
 
                   <th v-if="show.year">
@@ -176,27 +174,24 @@
                   </th>
 
                   <th v-if="show.price" >
-                    <v-select
+                    <input
+                      style="width: 70px;padding-left: 5px; border: 1px solid #3333; border-radius: 5px; height: 28px;"
                       v-model="priceFilter"
-                      taggable
                     />
                   </th>
 
                   <th v-if="show.days">
-                    <v-select
+                    <input
+                      style="width: 50px;padding-left: 5px; border: 1px solid #3333; border-radius: 5px; height: 28px;"
                       v-model="daysFilter"
-                      taggable
                     />
                   </th>
                   
                   <th v-if="show.lastAction">
-                    <v-select
-                      multiple
+                    <input
+                      style="display: flex; width: 100%; padding-left: 5px; border: 1px solid #3333; border-radius: 5px; height: 28px;"
                       v-model="lastActionFilter"
-                      :options="lastActionForSearch"
-                      :reduce="ultima_movimentacao => ultima_movimentacao"
-                      label="ultima_movimentacao"
-                      />
+                    />
                   </th>
 
                   <th></th>
@@ -207,27 +202,81 @@
                 <tr>
                   <!-- <th>Disp.</th> -->
                   <th v-if="show.vehicle">
-                    <v-btn v-if="false" small icon flat><v-icon class="mb-1" size="17">person</v-icon></v-btn>
-                    Veículo
-                    <!-- Veículo -->
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span>Veículo</span>
+                      <v-btn @click="vehicleSort" :disabled="ordenaDisable" small icon flat>
+                        <v-icon class="mb-1" size="17" v-if="ordena">arrow_upward</v-icon>
+                        <v-icon class="mb-1" size="17" v-else>arrow_downward</v-icon>
+                      </v-btn>
+                    </div>
                   </th>
                   <th v-if="show.year">
-                    <v-btn v-if="false" small icon flat><v-icon class="mb-1" size="17">person</v-icon></v-btn>
-                    Mod/Fab
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span>Mod/Fab</span>
+                      <v-btn @click="yearSort" :disabled="ordenaDisable" small icon flat>
+                        <v-icon class="mb-1" size="17" v-if="ordena">arrow_upward</v-icon>
+                        <v-icon class="mb-1" size="17" v-else>arrow_downward</v-icon>
+                      </v-btn>
+                    </div>
                   </th>
-                  <th v-if="show.brand">Marca</th>
-                  <th v-if="show.plate">Placa</th>
-                  <th v-if="show.color">Cor</th>
-                  <th v-if="show.tenant">Loja</th>
-                  <th v-if="show.price">Preço</th>
-                  <th v-if="show.days">Dias em estoque</th>
-                  <th v-if="show.lastAction">Última ação</th>
-                  <th>Ações</th>
+                  <th v-if="show.brand">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span>Brand</span>
+                      <v-btn @click="brandSort" :disabled="ordenaDisable" small icon flat>
+                        <v-icon class="mb-1" size="17" v-if="ordena">arrow_upward</v-icon>
+                        <v-icon class="mb-1" size="17" v-else>arrow_downward</v-icon>
+                      </v-btn>
+                    </div>
+                  </th>
+                  <th v-if="show.plate">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span class="mb-2">Placa</span>
+                    </div>
+                  </th>
+                  <th v-if="show.color">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span class="mb-2">Cor</span>
+                    </div>
+                  </th>
+                  <th v-if="show.tenant">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span class="mb-2">Loja</span>
+                    </div>
+                  </th>
+                  <th v-if="show.price">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span>Preço</span>
+                      <v-btn @click="priceSort" :disabled="ordenaDisable" small icon flat>
+                        <v-icon class="mb-1" size="17" v-if="ordena">arrow_upward</v-icon>
+                        <v-icon class="mb-1" size="17" v-else>arrow_downward</v-icon>
+                      </v-btn>
+                    </div>
+                  </th>
+                  <th v-if="show.days">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span>Dias em estoque</span>
+                      <v-btn @click="daysSort" :disabled="ordenaDisable" small icon flat>
+                        <v-icon class="mb-1" size="17" v-if="ordena">arrow_upward</v-icon>
+                        <v-icon class="mb-1" size="17" v-else>arrow_downward</v-icon>
+                      </v-btn>
+                    </div>
+                  </th>
+                  <th v-if="show.lastAction">
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span class="mb-2">Última Ação</span>
+                    </div>
+                  </th>
+                  <th>
+                    <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
+                      <span class="mb-2">Ações</span>
+                    </div>
+                  </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody style="min-height: 700px; max-width: 100%">
                 <template v-if="entriesOthersEntities.length">
                   <tr
+                    style="min-height: 700px; max-width: 100%"
                     v-for="(entry, i) in filteredEntries"
                     :key="i+'table'"
                   >
@@ -244,7 +293,7 @@
                       v-bind:class="{overdue: totalOfDays(entry.created_at) >= 60}"
                     >{{ totalOfDays(entry.created_at)}}</td>
                     <td v-if="show.lastAction">{{entry.description}}</td>
-                    <td>
+                    <td style="width: 20px">
                       <button
                         v-if="profile.map['vehicle-entries'].includes('edit')"
                         @click="$router.push({ name: 'VehicleEntryEdit', params: { id: entry.id } })"
@@ -300,16 +349,17 @@ export default {
       const filtroTotal = this.filteredEntriesBkp
       var filtrados = []
 
-      filtro.map(dado => {
-        filtroTotal.map(item => {
-          if (item.full_name.toUpperCase() === dado) {
-            filtrados.push(item)
-          }
-        })
+      var filtroUpperCase = filtro.toUpperCase()
+      filtroTotal.map(item => {
+        var dadoUpperCase = item.full_name.toUpperCase()
+        if (dadoUpperCase.match(filtroUpperCase)) {
+          filtrados.push(item)
+        }
       })
 
       this.vehicleResults = filtrados
       this.noRepeatPlease()
+      // setTimeout(() => this.noRepeatPlease(), 1000)
     },
     yearFilter: function () {
       const filtro = this.yearFilter
@@ -425,17 +475,18 @@ export default {
       this.daysResults = filtrados
       this.noRepeatPlease()
     },
+    // filtro de texto
     lastActionFilter: function () {
       const filtro = this.lastActionFilter
       const filtroTotal = this.filteredEntriesBkp
       var filtrados = []
 
-      filtro.map(dado => {
-        filtroTotal.map(item => {
-          if (item.ultimo_movimento.toUpperCase() === dado) {
-            filtrados.push(item)
-          }
-        })
+      var filtroUpperCase = filtro.toUpperCase()
+      filtroTotal.map(item => {
+        var dadoUpperCase = item.description.toUpperCase()
+        if (dadoUpperCase.match(filtroUpperCase)) {
+          filtrados.push(item)
+        }
       })
 
       this.lastActionResults = filtrados
@@ -474,6 +525,117 @@ export default {
     }
   },
   methods: {
+    daysSort: function () {
+      this.ordenaDisable = true
+      const ordena = this.ordena
+
+      this.ordena = !this.ordena
+
+      const dadosPO = this.filteredEntries
+      var dadosParaOrdenar = dadosPO
+      var self = this
+      var dadosOrdenados = null
+      if (ordena) {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return self.totalOfDays(a.created_at) - self.totalOfDays(b.created_at)
+        })
+      } else {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return self.totalOfDays(b.created_at) - self.totalOfDays(a.created_at)
+        })
+      }
+
+      this.filteredEntries = dadosOrdenados
+      this.ordenaDisable = false
+    },
+    priceSort: function () {
+      this.ordenaDisable = true
+      const ordena = this.ordena
+
+      this.ordena = !this.ordena
+
+      const dadosPO = this.filteredEntries
+      var dadosParaOrdenar = dadosPO
+      var dadosOrdenados = null
+      if (ordena) {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return parseFloat(a.sale_price) - parseFloat(b.sale_price)
+        })
+      } else {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return parseFloat(b.sale_price) - parseFloat(a.sale_price)
+        })
+      }
+
+      this.filteredEntries = dadosOrdenados
+      this.ordenaDisable = false
+    },
+    yearSort: function () {
+      this.ordenaDisable = true
+      const ordena = this.ordena
+
+      this.ordena = !this.ordena
+
+      const dadosPO = this.filteredEntries
+      var dadosParaOrdenar = dadosPO
+      var dadosOrdenados = null
+      if (ordena) {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return a.fabrication_year.localeCompare(b.fabrication_year)
+        })
+      } else {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return b.fabrication_year.localeCompare(a.fabrication_year)
+        })
+      }
+
+      this.filteredEntries = dadosOrdenados
+      this.ordenaDisable = false
+    },
+    vehicleSort: function () {
+      this.ordenaDisable = true
+      const ordena = this.ordena
+
+      this.ordena = !this.ordena
+
+      const dadosPO = this.filteredEntries
+      var dadosParaOrdenar = dadosPO
+      var dadosOrdenados = null
+      if (ordena) {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return a.full_name.localeCompare(b.full_name)
+        })
+      } else {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return b.full_name.localeCompare(a.full_name)
+        })
+      }
+
+      this.filteredEntries = dadosOrdenados
+      this.ordenaDisable = false
+    },
+    brandSort: function () {
+      this.ordenaDisable = true
+      const ordena = this.ordena
+
+      this.ordena = !this.ordena
+
+      const dadosPO = this.filteredEntries
+      var dadosParaOrdenar = dadosPO
+      var dadosOrdenados = null
+      if (ordena) {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return a.brand.localeCompare(b.brand)
+        })
+      } else {
+        dadosOrdenados = dadosParaOrdenar.sort(function (a, b) {
+          return b.brand.localeCompare(a.brand)
+        })
+      }
+
+      this.filteredEntries = dadosOrdenados
+      this.ordenaDisable = false
+    },
     noRepeatPlease: function () {
       const vehicle = this.vehicleResults
       const year = this.yearResults
@@ -845,7 +1007,7 @@ export default {
       var dadosSearch = []
       dados.map(function (dado) {
         let dadoExiste = false
-        const dadoAtual = dado.sale_price
+        const dadoAtual = parseFloat(dado.sale_price)
         // loop
         dadosSearch.map(function (dadoExistente) {
           if (dadoExistente === dadoAtual) {
@@ -861,13 +1023,15 @@ export default {
       const priceSortido = dadosSearch.sort()
       this.priceForSearch = priceSortido
     },
-    // no-ok
+    // ok
     filterDays: function (result) {
       var dados = result
       var dadosSearch = []
+      var self = this
       dados.map(function (dado) {
         let dadoExiste = false
-        const dadoAtual = dado.created_at.toUpperCase()
+        let dadoAt = dado.created_at
+        var dadoAtual = self.totalOfDays(dadoAt)
         // loop
         dadosSearch.map(function (dadoExistente) {
           if (dadoExistente === dadoAtual) {
@@ -880,7 +1044,8 @@ export default {
           dadosSearch.push(dadoAtual)
         }
       })
-      this.daysForSearch = dadosSearch
+      const daysSearch = dadosSearch.sort()
+      this.daysForSearch = daysSearch
     },
     // ok
     filterLastAction: function (result) {
@@ -1068,6 +1233,8 @@ export default {
   },
   data () {
     return {
+      ordena: true,
+      ordenaDisable: false,
       show: {
         vehicle: true,
         year: true,
@@ -1090,15 +1257,15 @@ export default {
       daysForSearch: [],
       lastActionForSearch: [],
       // \\
-      vehicleFilter: [],
+      vehicleFilter: '',
       yearFilter: [],
       brandFilter: [],
       plateFilter: [],
       colorFilter: [],
       tenantFilter: [],
-      priceFilter: [],
-      daysFilter: [],
-      lastActionFilter: [],
+      priceFilter: '',
+      daysFilter: '',
+      lastActionFilter: '',
       // \\
       vehicleResults: [],
       yearResults: [],
@@ -1175,15 +1342,15 @@ export default {
           .then(({ data }) => {
             this.entriesOthersEntities = data.data
             this.filteredEntriesBkp = data.data
-            this.filterVehicle(data.data)
+            // this.filterVehicle(data.data)
             this.filterYear(data.data)
             this.filterBrand(data.data)
             this.filterPlate(data.data)
             this.filterColor(data.data)
             this.filterTenant(data.data)
-            // this.filterPrice(data.data.data)
-            // this.filterDays(data.data.data)
-            this.filterLastAction(data.data)
+            // this.filterPrice(data.data)
+            // this.filterDays(data.data)
+            // this.filterLastAction(data.data)
           })
       })
     this.$root.axios.get(`http://vendas.vipcarseminovos.com.br/api/v1/employees/${localStorage.id}/get_listprefs`, {
