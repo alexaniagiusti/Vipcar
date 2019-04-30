@@ -110,7 +110,7 @@
               </div>
             </div>
           </div>
-          <div  class="table-responsive" style="display: flex; max-width: 100% ; min-height: 700px;">
+          <div  class="table-responsive custom-scroll" style="min-height:350px; overflow-y: auto;">
             <table class="table table-condensed table-bordered">
               <thead>
                 <tr class="pb-0 mb-0">
@@ -186,7 +186,7 @@
                       v-model="daysFilter"
                     />
                   </th>
-                  
+
                   <th v-if="show.lastAction">
                     <input
                       style="display: flex; width: 100%; padding-left: 5px; border: 1px solid #3333; border-radius: 5px; height: 28px;"
@@ -255,10 +255,10 @@
                   <th v-if="show.days">
                     <div style="display: flex; flex-wrap: nowrap; justify-content: center; align-items: center;" >
                       <span>Dias em estoque</span>
-                      <v-btn @click="daysSort" :disabled="ordenaDisable" small icon flat>
+                      <a style="cursor: pointer" @click="daysSort" :disabled="ordenaDisable">
                         <v-icon class="mb-1" size="17" v-if="ordena">arrow_upward</v-icon>
                         <v-icon class="mb-1" size="17" v-else>arrow_downward</v-icon>
-                      </v-btn>
+                      </a>
                     </div>
                   </th>
                   <th v-if="show.lastAction">
@@ -293,9 +293,8 @@
                       v-bind:class="{overdue: totalOfDays(entry.created_at) >= 60}"
                     >{{ totalOfDays(entry.created_at)}}</td>
                     <td v-if="show.lastAction">{{entry.description}}</td>
-                    <td style="width: 20px">
+                    <td >
                       <button
-                        v-if="profile.map['vehicle-entries'].includes('edit')"
                         @click="$router.push({ name: 'VehicleEntryEdit', params: { id: entry.id } })"
                         class="btn btn-sm btn-default"
                       >Detalhes</button>
@@ -369,9 +368,10 @@ export default {
       filtro.map(dado => {
         const dadoUm = `${dado}/${dado + 1}`
         const dadoDois = `${dado - 1}/${dado}`
+        const dadoTres = `${dado}/${dado}`
 
         filtroTotal.map(item => {
-          if (item.fabrication_year === dadoUm || item.fabrication_year === dadoDois) {
+          if (item.fabrication_year === dadoUm || item.fabrication_year === dadoDois || item.fabrication_year === dadoTres) {
             filtrados.push(item)
           }
         })
@@ -473,7 +473,7 @@ export default {
       })
 
       this.daysResults = filtrados
-      this.noRepeatPlease()
+      setTimeout(() => this.noRepeatPlease(), 1000)
     },
     // filtro de texto
     lastActionFilter: function () {
