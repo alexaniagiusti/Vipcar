@@ -44,21 +44,20 @@
       })
     },
     mounted () {
-      this.$root.axios.get('/vehicle-entry').then(({data}) => {
-        this.vehicles = data.data.data
+      this.$root.axios.get('http://vendas.vipcarseminovos.com.br/api/v1/entries/estoque/').then(({data}) => {
+        this.vehicles = data.data
 
         let options = this.vehicles.map((entry) => {
           console.log()
           let date = moment(entry.created_at, 'YYYY-MM-DD').format('DD/MM/YYYY')
-          return `#${entry.id_key} ${entry.plate} - ${entry.state_label} (Entrada: ${date})`
+          return `Placa:${entry.plate}, Entrada: ${date}`
         })
         window.jQuertPolyfill('#search-fld').autocomplete({
           source: options,
           select: (event, ui) => {
             let vehicle = this.vehicles.find(
               v =>
-                ui.item.value.includes(v.plate) &&
-                ui.item.value.includes('#' + v.id_key)
+                ui.item.value.includes(v.plate)
             )
 
             this.$router.push(`/vehicle-entry/${vehicle.id}/edit`)
