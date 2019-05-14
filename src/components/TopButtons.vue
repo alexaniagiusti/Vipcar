@@ -44,7 +44,7 @@
       })
     },
     mounted () {
-      this.$root.axios.get('http://vendas.vipcarseminovos.com.br/api/v1/entries/estoque/').then(({data}) => {
+      this.$root.axios.get('/entries/searchEntry').then(({data}) => {
         this.vehicles = data.data
 
         let options = this.vehicles.map((entry) => {
