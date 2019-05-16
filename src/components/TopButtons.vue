@@ -55,15 +55,21 @@
         window.jQuertPolyfill('#search-fld').autocomplete({
           source: options,
           select: (event, ui) => {
-            let vehicle = this.vehicles.find(
-              v =>
-                ui.item.value.includes(v.plate)
-            )
+            var selectedVehicle = null
+            let allVehicles = this.vehicles
+            allVehicles.filter(item => {
+              const entradaVehicle = moment(item.created_at, 'YYYY-MM-DD').format('DD/MM/YYYY')
+              if (ui.item.value.match(item.plate)) {
+                selectedVehicle = item
+              } else if (ui.item.value.match(entradaVehicle)) {
+                selectedVehicle = item
+              }
+            })
 
-            this.$router.push(`/vehicle-entry/${vehicle.id}/edit`)
+            this.$router.push(`/vehicle-entry/${selectedVehicle.id}/edit`)
             this.$router.push({name: 'VehicleEntryEdit',
               params: {
-                id: vehicle.id
+                id: selectedVehicle.id
               }
             })
             this.search = undefined
