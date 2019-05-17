@@ -44,7 +44,7 @@
       })
     },
     mounted () {
-      this.$root.axios.get('/entries/searchEntry').then(({data}) => {
+      this.$root.axios.get('http://vendas.vipcarseminovos.com.br/api/v1/entries/searchEntry').then(({data}) => {
         this.vehicles = data.data
 
         let options = this.vehicles.map((entry) => {
@@ -58,19 +58,13 @@
             var selectedVehicle = null
             let allVehicles = this.vehicles
             allVehicles.filter(item => {
-              const entradaVehicle = moment(item.created_at, 'YYYY-MM-DD').format('DD/MM/YYYY')
               if (ui.item.value.match(item.plate)) {
-                selectedVehicle = item
-              } else if (ui.item.value.match(entradaVehicle)) {
                 selectedVehicle = item
               }
             })
 
             this.$router.push(`/vehicle-entry/${selectedVehicle.id}/edit`)
-            this.$router.push({name: 'VehicleEntryEdit',
-              params: {
-                id: selectedVehicle.id
-              }
+            this.$router.push({name: 'VehicleEntryEdit'
             })
             this.search = undefined
           }
