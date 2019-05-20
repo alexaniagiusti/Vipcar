@@ -114,7 +114,7 @@ class Api {
     this.http.put(`${this.basePath}/${id}`, payload).then(defaultCallback)
   }
   paginated (callback) {
-    this.http.get(`${this.basePath}`, {
+    this.http.get(`http://vendas.vipcarseminovos.com.br/api/v1/${this.basePath}`, {
       params: {
         q: `tenant_id:${localStorage.getItem('current-tenant-idkey')}`,
         sf: 'tenant_id:=',
@@ -123,6 +123,7 @@ class Api {
     }).then(({ data }) => {
       callback(data.data)
     })
+    .catch(error => alert(error))
   }
 
   useSortService (service) {

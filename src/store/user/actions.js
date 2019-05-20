@@ -1,6 +1,6 @@
 export const actionUser = {
   logout ({commit}, router) {
-    localStorage.setItem('id', undefined)
+    localStorage.setItem('id', '')
     localStorage.setItem('authenticated', false)
     localStorage.setItem('userName', '')
     localStorage.setItem('email', '')
@@ -11,7 +11,7 @@ export const actionUser = {
     router.push({name: 'Dashboard'})
   },
   login ({commit}, {user, token, profile}) {
-    localStorage.setItem('id', user.id)
+    localStorage.setItem('id', user['id'])
     localStorage.setItem('authenticated', true)
     localStorage.setItem('userName', user.name)
     localStorage.setItem('email', user.email)

@@ -76,6 +76,9 @@
                       <span v-else-if="model['state_id'] == 2" class="label label-danger">
                         {{ model['state_label'] }}
                       </span>
+                      <span v-else-if="model['state_id'] == 3" class="label label-danger">
+                        Reservado
+                      </span>
                     </td>
                     <td>{{ model['sale_price_formatted'] }}</td>
                     <td>
@@ -93,9 +96,9 @@
                                 </li>
                               </ul>
                             </div>
-                            <router-link title="Iniciar uma Nova Venda" v-if="model.state_id == 1 && profile.map['vehicle-sale'].includes('create')" :to="{path: `vehicle-sale/create/${model.id}`}" class="btn btn-sm btn-primary">
+                            <a title="Iniciar uma Nova Venda" v-if="model.state_id === 3 || model.state_id == 1 && profile.map['vehicle-sale'].includes('create')" @click="enviaParaVenda(model)" class="btn btn-sm btn-primary">
                               <i class="fa fa-lg fa-dollar"></i>
-                            </router-link>
+                            </a >
                             <router-link title="Editar Dados do Veículo" v-if="profile.map['vehicle-entries'].includes('edit')" :to="{path: `vehicle-entry/${model.id}/edit`}" class="btn btn-sm btn-default">
                               <i class="fa fa-lg fa-pencil"></i>
                             </router-link>
@@ -135,6 +138,7 @@
   export default {
     computed: {
       ...mapState({
+        user: state => state.user,
         authenticated: state => state.user.authenticated,
         token: state => state.user.token,
         profile: state => state.user.profile
@@ -162,6 +166,37 @@
       }
     },
     methods: {
+      async enviaParaVenda (model) {
+        if (model.state_id === 3) {
+          await this.$root.axios.get('http://vendas.vipcarseminovos.com.br/api/v1/entries/estoque/').then(({data}) => {
+            const respServer = data.data
+            this.matchReserva(respServer, model)
+          })
+          .catch((error) => alert('error: ' + error.message))
+        } else {
+          this.$router.push(`vehicle-sale/create/${model.id}`)
+        }
+      },
+      matchReserva (respServer, model) {
+        var veiculoSelecionado = model
+        respServer.map(veiculo => {
+          if (veiculo.plate === veiculoSelecionado.plate) {
+            var reserva = {
+              id_reserva: veiculo.id_reserva,
+              vendedor_id: veiculo.vendedor_id,
+              user_reserva: veiculo.user_reserva,
+              data_reserva: veiculo.data_reserva
+            }
+            const idUserAtual = parseInt(localStorage.id)
+            const idUserReserva = parseInt(reserva.vendedor_id)
+            if (idUserAtual === idUserReserva) {
+              this.$router.push(`vehicle-sale/create/${veiculo.id}`)
+            } else {
+              alert('Somente o usuário que reservou pode iniciar a venda.')
+            }
+          }
+        })
+      },
       showTemplate (id, entryId) {
         this.$root.axios.get(`entries/document/${id}/${localStorage.getItem('current-tenant-idkey')}/${entryId}`).then(({data}) => {
           var a = document.createElement('a')

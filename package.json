@@ -86,6 +86,7 @@
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
     "url-loader": "^0.5.7",
+    "vue-cli-plugin-pug": "^1.0.7",
     "vue-cli-plugin-vuetify": "^0.5.0",
     "vue-loader": "^11.1.4",
     "vue-style-loader": "^2.0.0",

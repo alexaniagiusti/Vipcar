@@ -4,6 +4,11 @@ import Vuex from 'vuex'
 import { stateUser } from '@/store/user/state'
 import { actionUser } from '@/store/user/actions'
 import { mutationsUser } from '@/store/user/mutations'
+
+import { stateReserveVehicle } from '@/store/reserveVehicle/state'
+import { actionsReserveVehicle } from '@/store/reserveVehicle/actions'
+import { mutationsReserveVehicle } from '@/store/reserveVehicle/mutations'
+
 import { stateBreadcrumb } from '@/store/breadcrumbs'
 import { actionBreadcrumb } from '@/store/breadcrumbs/actions'
 import { mutationsBreadcrumb } from '@/store/breadcrumbs/mutations'
@@ -33,6 +38,17 @@ const store = new Vuex.Store({
       },
       mutations: {
         ...mutationsBreadcrumb
+      }
+    },
+    reserveVehicle: {
+      state: {
+        ...stateReserveVehicle
+      },
+      actions: {
+        ...actionsReserveVehicle
+      },
+      mutations: {
+        ...mutationsReserveVehicle
       }
     }
   }

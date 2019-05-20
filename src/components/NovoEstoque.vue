@@ -194,7 +194,9 @@
                     />
                   </th>
 
-                  <th></th>
+                  <th>
+                    <input type="checkbox" v-model="actionsFilter"/> Reservados
+                  </th>
 
                 </tr>
               </thead>
@@ -298,6 +300,13 @@
                         @click="$router.push({ name: 'VehicleEntryEdit', params: { id: entry.id } })"
                         class="btn btn-sm btn-default"
                       >Detalhes</button>
+                      <button
+                        @click="abreReserva(entry)"
+                        class="btn btn-sm btn-default"
+                      >
+                        <span v-if="entry.state_id === 3" class="red--text">Reservado</span>
+                        <span v-else class="green--text">Reservar</span>
+                      </button>
                     </td>
                   </tr>
                 </template>
@@ -317,6 +326,7 @@
         </div>
       </div>
     </div>
+    <Reserva/>
   </div>
 </template>
 
@@ -328,18 +338,21 @@ import Api from '@/components/Resources/VehicleEntry/Api'
 import mmt from 'moment'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
+import Reserva from './Reserva'
 
 export default {
   name: 'estoque',
   components: {
-    vSelect
+    vSelect,
+    Reserva
   },
   computed: {
     ...mapState({
       user: state => state.user,
       authenticated: state => state.user.authenticated,
       token: state => state.user.token,
-      profile: state => state.user.profile
+      profile: state => state.user.profile,
+      reserveVehicle: state => state.reserveVehicle
     })
   },
   watch: {
@@ -492,6 +505,24 @@ export default {
       this.lastActionResults = filtrados
       this.noRepeatPlease()
     },
+    actionsFilter: function () {
+      const filtro = this.actionsFilter
+      const filtroTotal = this.filteredEntriesBkp
+      var filtrados = []
+
+      if (filtro) {
+        filtroTotal.map(item => {
+          var dado = parseInt(item.state_id)
+          if (dado === 3) {
+            filtrados.push(item)
+          }
+        })
+        this.actionsResults = filtrados
+      } else {
+        this.actionsResults = []
+      }
+      this.noRepeatPlease()
+    },
     searchTerm: function (term) {
       this.searchTermIsDirty = true
       this.search(term)
@@ -525,6 +556,30 @@ export default {
     }
   },
   methods: {
+    abreReserva: function (entry) {
+      if (entry.state_id === 3) {
+        this.$root.axios
+          .get(`http://vendas.vipcarseminovos.com.br/api/v1/entries/reserva/${entry.id_reserva}`)
+          .then((res) => {
+            var reserva = res.data.data
+            var entrada = entry
+            const payload = {
+              entry: entrada,
+              reserva: reserva
+            }
+            this.$store.dispatch('CHANGE_VISIBILITY', payload)
+          })
+          .catch(() => {
+            alert('erro')
+          })
+      } else {
+        const payload = {
+          entry: entry,
+          reserva: {}
+        }
+        this.$store.dispatch('CHANGE_VISIBILITY', payload)
+      }
+    },
     daysSort: function () {
       this.ordenaDisable = true
       const ordena = this.ordena
@@ -646,6 +701,7 @@ export default {
       const price = this.priceResults
       const days = this.daysResults
       const lastAction = this.lastActionResults
+      const actions = this.actionsResults
 
       const vehicleCode = this.vehicleResults.length === 0 ? '0' : '1'
       const yearCode = this.yearResults.length === 0 ? '0' : '1'
@@ -656,8 +712,9 @@ export default {
       const priceCode = this.priceResults.length === 0 ? '0' : '1'
       const daysCode = this.daysResults.length === 0 ? '0' : '1'
       const lastActionCode = this.lastActionResults.length === 0 ? '0' : '1'
+      const actionsCode = this.actionsResults.length === 0 ? '0' : '1'
 
-      var codigo = vehicleCode + yearCode + brandCode + plateCode + colorCode + tenantCode + priceCode + daysCode + lastActionCode
+      var codigo = vehicleCode + yearCode + brandCode + plateCode + colorCode + tenantCode + priceCode + daysCode + lastActionCode + actionsCode
 
       var resultadosFiltrados = []
       var resultadosNaoFiltrados = []
@@ -699,6 +756,10 @@ export default {
         return resultadosNaoFiltrados.push(v)
       })
 
+      actions.map(v => {
+        return resultadosNaoFiltrados.push(v)
+      })
+
       // loopFilter
       resultadosNaoFiltrados.map(dado => {
         let dadoExiste = false
@@ -731,6 +792,7 @@ export default {
       const price = this.priceResults
       const days = this.daysResults
       const lastAction = this.lastActionResults
+      const actions = this.actionsResults
 
       const segundoFiltro = resultadosFiltrados
       var resultadoSegundoFiltro = []
@@ -744,6 +806,7 @@ export default {
         var sete = '0'
         var oito = '0'
         var nove = '0'
+        var dez = '0'
         // item representa um item gerado na pesquisa
         // inicio dos loops
 
@@ -854,15 +917,26 @@ export default {
           })
         }
 
+        // dez actions
+        if (actions.length === 0) {
+          nove = '0'
+        } else {
+          actions.map(v => {
+            if (v.state_id === item.state_id) {
+              dez = '1'
+            }
+          })
+        }
+
         // codigo gerado aqui
-        var codigoGerado = um + dois + tres + quatro + cinco + seis + sete + oito + nove
+        var codigoGerado = um + dois + tres + quatro + cinco + seis + sete + oito + nove + dez
 
         if (codigoGerado === codigo) {
           resultadoSegundoFiltro.push(item)
         }
       })
       // ok results
-      if (codigo === '000000000') {
+      if (codigo === '0000000000') {
         const bkp = this.filteredEntriesBkp
         this.filteredEntries = bkp
       } else {
@@ -1266,6 +1340,7 @@ export default {
       priceFilter: '',
       daysFilter: '',
       lastActionFilter: '',
+      actionsFilter: false,
       // \\
       vehicleResults: [],
       yearResults: [],
@@ -1276,6 +1351,7 @@ export default {
       priceResults: [],
       daysResults: [],
       lastActionResults: [],
+      actionsResults: [],
       // fim
       filterOptions: true,
       entityEntries: [],
