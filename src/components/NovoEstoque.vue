@@ -352,10 +352,17 @@ export default {
       authenticated: state => state.user.authenticated,
       token: state => state.user.token,
       profile: state => state.user.profile,
-      reserveVehicle: state => state.reserveVehicle
+      reserveVehicle: state => state.reserveVehicle,
+      reserveOpen: state => state.reserveVehicle.open
     })
   },
   watch: {
+    reserveOpen: function (val) {
+      if (val === false) {
+        console.log('mudou')
+        setTimeout(() => this.pegaDadosNovamente(), 500)
+      }
+    },
     vehicleFilter: function () {
       const filtro = this.vehicleFilter
       const filtroTotal = this.filteredEntriesBkp
@@ -556,6 +563,22 @@ export default {
     }
   },
   methods: {
+    async pegaDadosNovamente () {
+      const token = localStorage.token
+      const config = {
+        headers: {
+          'Authorization': 'bearer' + token
+        }
+      }
+      await this.$root.axios
+        .get('http://vendas.vipcarseminovos.com.br/api/v1/entries/estoque/', config)
+        .then(({ data }) => {
+          this.entriesOthersEntities = data.data
+          this.filteredEntriesBkp = data.data
+          this.filteredEntries = data.data
+        })
+        .catch(error => alert('erro ' + error))
+    },
     abreReserva: function (entry) {
       if (entry.state_id === 3) {
         this.$root.axios

@@ -120,7 +120,10 @@ export default {
           this.errorMessage = error.message
           this.carregando = false
         })
-      var r = null
+      var r = {
+        entry: {},
+        reserva: {}
+      }
       this.$store.dispatch('CHANGE_VISIBILITY', r)
     },
     cancelaReserva (reserveVehicle, user) {
@@ -142,7 +145,10 @@ export default {
             this.carregando = false
             this.errorMessage = error.message
           })
-        var r = null
+        var r = {
+          entry: {},
+          reserva: {}
+        }
         this.$store.dispatch('CHANGE_VISIBILITY', r)
       } else {
         alert('Você não tem permissão para cancelar esta reserva')
