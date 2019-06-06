@@ -1,0 +1,53 @@
+[33mcommit 9cb5ed83aeeffa8db91d2b15814ffc486e5b44b1[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: Alexânia <alexaniagiusti@hotmail.com>
+Date:   Mon May 20 16:45:55 2019 -0300
+
+    correção de bug
+
+[33mcommit 14a943a0c3aba2f44b6f45ae6429c68a674b83a4[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Alexânia <alexaniagiusti@hotmail.com>
+Date:   Mon May 20 14:50:00 2019 -0300
+
+    reserva
+
+[33mcommit 8415043053d80769ab4608d4ca4c7883729c0e10[m
+Author: Alexânia Giusti <alexaniagiusti@hotmail.com>
+Date:   Fri May 17 15:23:11 2019 -0300
+
+    correção de bug na rota
+
+[33mcommit 2a88ed91084a207ac75c8baeabdccafd6c48331c[m
+Author: Alexânia Giusti <alexaniagiusti@hotmail.com>
+Date:   Thu May 16 15:57:50 2019 -0300
+
+    correção de bug no campo de busca
+
+[33mcommit d65582a2a23b9719b1937fd219a25b34f568b758[m
+Author: Alexânia Giusti <alexaniagiusti@hotmail.com>
+Date:   Tue May 14 20:34:45 2019 -0300
+
+    correção da rota de pesquisa
+
+[33mcommit b6712eec6a4c9cbb71420290987510a35e3635ed[m
+Author: Alexânia Giusti <alexaniagiusti@hotmail.com>
+Date:   Tue May 14 18:46:48 2019 -0300
+
+    Correção da barra de pesquisa
+
+[33mcommit 91e4d4b8db7ecad915fd48e50f6a6f60237cb9f1[m
+Author: Alexânia Giusti <alexaniagiusti@hotmail.com>
+Date:   Tue Apr 30 15:38:36 2019 -0300
+
+    Retirada condição que ocultava informações da coluna ações
+
+[33mcommit bac4e1cf27facc348f35c793e6045f318ef0493c[m
+Author: Alexânia Giusti <alexaniagiusti@hotmail.com>
+Date:   Tue Apr 30 09:46:16 2019 -0300
+
+    tudo ok
+
+[33mcommit 22e07abace8eccae32988286a642ee59de33e509[m
+Author: Alexânia Giusti <alexaniagiusti@hotmail.com>
+Date:   Mon Apr 29 10:44:02 2019 -0300
+
+    novas funcionalidades
