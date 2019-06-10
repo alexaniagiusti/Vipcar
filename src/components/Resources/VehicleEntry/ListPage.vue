@@ -96,7 +96,7 @@
                                 </li>
                               </ul>
                             </div>
-                            <a title="Iniciar uma Nova Venda" v-if="model.state_id === 3 || model.state_id == 1 && profile.map['vehicle-sale'].includes('create')" @click="enviaParaVenda(model)" class="btn btn-sm btn-primary">
+                            <a title="Iniciar uma Nova Venda" v-if="model.state_id === 3 || model.state_id === 1 && profile.map['vehicle-sale'].includes('create')" @click="enviaParaVenda(model)" class="btn btn-sm btn-primary">
                               <i class="fa fa-lg fa-dollar"></i>
                             </a >
                             <router-link title="Editar Dados do Veículo" v-if="profile.map['vehicle-entries'].includes('edit')" :to="{path: `vehicle-entry/${model.id}/edit`}" class="btn btn-sm btn-default">
@@ -166,9 +166,15 @@
       }
     },
     methods: {
-      async enviaParaVenda (model) {
+      enviaParaVenda (model) {
         if (model.state_id === 3) {
-          await this.$root.axios.get('http://vendas.vipcarseminovos.com.br/api/v1/entries/estoque/').then(({data}) => {
+          const token = localStorage.token
+          const config = {
+            headers: {
+              'Authorization': 'bearer' + token
+            }
+          }
+          this.$root.axios.get('http://vendas.vipcarseminovos.com.br/api/v1/entries/estoque/', config).then(({data}) => {
             const respServer = data.data
             this.matchReserva(respServer, model)
           })
@@ -178,17 +184,23 @@
         }
       },
       matchReserva (respServer, model) {
-        var veiculoSelecionado = model
-        respServer.map(veiculo => {
+        const veiculoSelecionado = model
+        const all = respServer
+        all.map(veiculo => {
+          console.log('ok' + veiculo.id)
           if (veiculo.plate === veiculoSelecionado.plate) {
-            var reserva = {
+            console.log('---------OK_------------------------------------------------------------------------------------------------')
+            /* var reserva = {
               id_reserva: veiculo.id_reserva,
               vendedor_id: veiculo.vendedor_id,
               user_reserva: veiculo.user_reserva,
               data_reserva: veiculo.data_reserva
-            }
+            } */
             const idUserAtual = parseInt(localStorage.id)
-            const idUserReserva = parseInt(reserva.vendedor_id)
+            console.log('ij: ' + idUserAtual)
+            const idUserReserva = parseInt(veiculo.vendedor_id)
+            console.log('ij: ' + idUserReserva)
+
             if (idUserAtual === idUserReserva) {
               this.$router.push(`vehicle-sale/create/${veiculo.id}`)
             } else {

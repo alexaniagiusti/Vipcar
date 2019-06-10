@@ -192,7 +192,7 @@
             password: this.password
           }).then(({data}) => {
             var userResponse = data
-
+            localStorage.id = data.user.id
             this.$root.axios.get('user-tenants', {
               params: {
                 'q': `user_id:${data.user.id}`,
