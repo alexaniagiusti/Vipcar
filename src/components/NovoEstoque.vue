@@ -297,7 +297,7 @@
                     <td v-if="show.lastAction">{{entry.description}}</td>
                     <td>
                       <button
-                        v-if="profile.map['vehicle-entries'].includes('edit')"
+                       v-if="profile.map['vehicle-entries'].includes('info')"
                         @click="$router.push({ name: 'VehicleEntryEdit', params: { id: entry.id } })"
                         class="btn btn-sm btn-default"
                       >Detalhes</button>

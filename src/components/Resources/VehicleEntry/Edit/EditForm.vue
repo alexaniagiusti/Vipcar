@@ -164,14 +164,13 @@
         this.fetch()
       },
       getReadonlyStateField (field) {
-        if (this.lockStateId && field.name === 'state_id') {
-          return true
+        if (field.name === 'mean_price' || field.name === 'sale_price' || field.name === 'commission') {
+          if (this.profile.map['vehicle-entries'].includes('edit-acquisition-price')) {
+            return false
+          } else {
+            return true
+          }
         }
-
-        if (field.disableEdit) {
-          return field.disableEdit
-        }
-        return field.readonly
       },
       checkComponentType (field) {
         if (field.editComponent) {
